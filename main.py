@@ -25,7 +25,6 @@ X_test = scaler.transform(X_test)
 
 model = LogisticRegression(random_state=42)
 model.fit(X_train, y_train)
-print(model.intercept_)
 print("Model training complete!")
 
 predictions = model.predict(X_test)
@@ -36,4 +35,19 @@ report = classification_report(y_test, predictions)
 print("\nClassification Report:\n", report)
 
 accuracy = accuracy_score(y_test, predictions)
+print(f"Model Accuracy: {accuracy * 100:.2f}%")
+
+probabilities = model.predict_proba(X_test)
+pos_prob = probabilities[:, 1]
+cus_thresh = 0.3
+cus_pred = (pos_prob >= cus_thresh).astype(int)
+cm = confusion_matrix(y_test, cus_pred)
+
+print("\nConfusion Matrix at Threshold 0.3:\n")
+print(cm)
+
+report = classification_report(y_test, cus_pred)
+print("\nClassification Report:\n", report)
+
+accuracy = accuracy_score(y_test, cus_pred)
 print(f"Model Accuracy: {accuracy * 100:.2f}%")
