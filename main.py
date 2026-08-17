@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix, classification_report
 
 df = pd.read_csv('adult_income1.csv')
 
@@ -24,9 +25,15 @@ X_test = scaler.transform(X_test)
 
 model = LogisticRegression(random_state=42)
 model.fit(X_train, y_train)
+print(model.intercept_)
 print("Model training complete!")
 
 predictions = model.predict(X_test)
+matrix = confusion_matrix(y_test, predictions)
+print("Confusion Matrix:\n", matrix)
+
+report = classification_report(y_test, predictions)
+print("\nClassification Report:\n", report)
 
 accuracy = accuracy_score(y_test, predictions)
 print(f"Model Accuracy: {accuracy * 100:.2f}%")
